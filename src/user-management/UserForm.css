@@ -29,6 +29,7 @@
     padding: 10px;
     transition: background-color 0.3s ease;
     border-radius: 5px;
+    transition: 0.3s ease-in-out;
 }
 input{
     padding: 8px;
@@ -37,7 +38,12 @@ input{
     border-radius: 5px;
     font-size: 14px;
 }
+input:focus{
+    box-shadow: 0px 3px 5px grey;
+  
+}
 
 .submit input:hover{
     background-color: #0056b3;
+    transform: scale(1.02);
 }

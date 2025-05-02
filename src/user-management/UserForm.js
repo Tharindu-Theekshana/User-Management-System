@@ -3,9 +3,9 @@ import './UserForm.css';
 import { useState } from 'react';
 
 
-export default function UserForm(props) {
+export default function UserForm({addUsers}) {
 
-    const [id, setId] = useState("");
+    const [id, setId] = useState();
     const [name, setName] = useState("");
 
     const handleId= (e) => {
@@ -23,7 +23,7 @@ export default function UserForm(props) {
     <div className='cont'>
         <div className='id'>ID <input onChange={handleId} placeholder='Enter ID'/></div>
         <div className='name'>Name <input onChange={handleName} placeholder='Enter Name'/></div>
-        <div className='submit'><input type='submit' /></div>
+        <div className='submit'><input type='submit' onClick={() => addUsers({id,name})}/></div>
       
     </div>
   )

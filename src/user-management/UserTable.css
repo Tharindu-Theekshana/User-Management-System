@@ -38,6 +38,7 @@ div table td {
     border-radius: 5px;
     padding:5px;
     border: none;
+    transition: 0.3s ease-in-out;
   }
 
   .deleteButton{
@@ -46,13 +47,14 @@ div table td {
     border-radius: 5px;
     padding:5px;
     border: none;
+    transition: 0.3s ease-in-out;
   }
   .updateButton:hover{
     background-color: rgb(57, 229, 57);
-    border-bottom: 2px solid rgb(42, 41, 41);
+    transform: scale(1.02);
   }
 
   .deleteButton:hover{
     background-color: rgb(245, 57, 57);
-    border-bottom: 2px solid rgb(42, 41, 41);
+    transform: scale(1.02);
   }
