@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './UserForm.css';
 import { useState } from 'react';
 
 
-export default function UserForm({addUsers}) {
+export default function UserForm({addUsers,updateUser,isEdit,submited,data}) {
 
     const [id, setId] = useState();
     const [name, setName] = useState("");
@@ -15,15 +15,30 @@ export default function UserForm({addUsers}) {
         setName(e.target.value);
     }
 
+    useEffect(()=>{
+    
+      if(data?.id && data.id !== 0){
+        setId(data.id);
+        setName(data.name);
+      }
+    },[data]) 
+    useEffect(()=>{
+    
+      if(!submited){
+           setId("");
+           setName("");
+      }
+      
+    },[submited]) 
 
 
     
 
   return (
     <div className='cont'>
-        <div className='id'>ID <input onChange={handleId} placeholder='Enter ID'/></div>
-        <div className='name'>Name <input onChange={handleName} placeholder='Enter Name'/></div>
-        <div className='submit'><input type='submit' onClick={() => addUsers({id,name})}/></div>
+        <div className='id'>ID <input value={id} onChange={handleId} placeholder='Enter ID'/></div>
+        <div className='name'>Name <input value={name} onChange={handleName} placeholder='Enter Name'/></div>
+        <div className='submit'><input value={isEdit?'Update': 'Add'} onClick={isEdit?()=>updateUser({id,name}):()=>addUsers({id,name})}/></div>
       
     </div>
   )

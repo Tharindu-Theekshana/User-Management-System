@@ -9,6 +9,8 @@ export default function User() {
 
   const [users,setUsers] = useState([]);
   const [submited,setSubmited] = useState(false);
+  const [isEdit,setIsEdit] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({});
 
   useEffect(()=>{
     getusers();
@@ -38,14 +40,35 @@ export default function User() {
     });
   }
 
+  const updateUser = (data) => {
+    setSubmited(true);
+    const payload = {
+      id: data.id,
+      name: data.name
+    }
+    Axios.put('http://localhost:8081/api/v1/updateUser',payload).then(()=> {
+      getusers();
+      setSubmited(false);
+      setIsEdit(false);
+    })
+    .catch(error =>{
+      console.error("Axios error : ", error);
+    });
+
+  }
+
+  
+
+  
+
   
 
     
 
   return (
     <div>
-        <UserForm addUsers={addUsers}/>
-        <UserTable rows={users}/>
+        <UserForm addUsers={addUsers} submited={submited} isEdit={isEdit} updateUser={updateUser} data={selectedUser}/>
+        <UserTable rows={users} selectedUser={data=>{setSelectedUser(data); setIsEdit(true);}}/>
     </div>
   )
 }
