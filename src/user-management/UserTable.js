@@ -1,7 +1,7 @@
 import React from 'react'
 import './UserTable.css'
 
-export default function UserTable({rows,selectedUser}) {
+export default function UserTable({rows,selectedUser,deleteUser}) {
   return (
     <div>
       <table>
@@ -14,7 +14,7 @@ export default function UserTable({rows,selectedUser}) {
              <tr key={row.id}>
                 <td>{row.id}</td>
                 <td>{row.name}</td>
-                <td><button className='updateButton' onClick={()=>{selectedUser({id: row.id, name: row.name})}}>Update</button><button className='deleteButton'>Delete</button></td>
+                <td><button className='updateButton' onClick={()=>{selectedUser({id: row.id, name: row.name})}}>Update</button><button className='deleteButton' onClick={()=>deleteUser({id: row.id})}>Delete</button></td>
              </tr>
         ))}
       </table>

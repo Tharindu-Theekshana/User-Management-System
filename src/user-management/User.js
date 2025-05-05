@@ -17,7 +17,7 @@ export default function User() {
   },[])
 
   const getusers = () => {
-    Axios.get('http://localhost:8081/api/v1/getUsers').then(response =>{
+    Axios.get('http://localhost:8085/api/v1/getUsers').then(response =>{
       setUsers(response?.data || []);
   })
     .catch(error => {
@@ -31,7 +31,7 @@ export default function User() {
       id: data.id,
       name: data.name
     }
-    Axios.post('http://localhost:8081/api/v1/addUsers',payload).then(()=> {
+    Axios.post('http://localhost:8085/api/v1/addUsers',payload).then(()=> {
       getusers();
       setSubmited(false);
     })
@@ -46,7 +46,7 @@ export default function User() {
       id: data.id,
       name: data.name
     }
-    Axios.put('http://localhost:8081/api/v1/updateUser',payload).then(()=> {
+    Axios.put('http://localhost:8085/api/v1/updateUser',payload).then(()=> {
       getusers();
       setSubmited(false);
       setIsEdit(false);
@@ -57,6 +57,16 @@ export default function User() {
 
   }
 
+  const deleteUser = (data) => {
+    
+    Axios.delete(`http://localhost:8085/api/v1/deleteUser/${data.id}`).then(()=> {
+      getusers();
+    })
+    .catch(error =>{
+      console.error("Axios error : ", error);
+    });
+
+  }
   
 
   
@@ -68,7 +78,7 @@ export default function User() {
   return (
     <div>
         <UserForm addUsers={addUsers} submited={submited} isEdit={isEdit} updateUser={updateUser} data={selectedUser}/>
-        <UserTable rows={users} selectedUser={data=>{setSelectedUser(data); setIsEdit(true);}}/>
+        <UserTable rows={users} selectedUser={data=>{setSelectedUser(data); setIsEdit(true);}} deleteUser={data => window.confirm("Are you sure?") && deleteUser(data)}/>
     </div>
   )
 }
