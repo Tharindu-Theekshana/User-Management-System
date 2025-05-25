@@ -87,5 +87,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-Project Link: [https://github.com/yourusername/User-Management-System](https://github.com/yourusername/User-Management-System)
+Project Link: [https://github.com/Tharindu-Theekshana/User-Management-System](https://github.com/Tharindu-Theekshana/User-Management-System)
