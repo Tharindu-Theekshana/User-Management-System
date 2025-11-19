@@ -1,45 +1,61 @@
-import React, { useEffect } from 'react'
 import './UserForm.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
+export default function UserForm({ addUsers, updateUser, isEdit, data }) {
 
-export default function UserForm({addUsers,updateUser,isEdit,submited,data}) {
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
-    const [id, setId] = useState();
-    const [name, setName] = useState("");
-
-    const handleId= (e) => {
-        setId(e.target.value);
+  useEffect(() => {
+    if (isEdit && data) {
+      setId(data.id);
+      setName(data.name);
+      setEmail(data.email);
     }
-    const handleName= (e) => {
-        setName(e.target.value);
-    }
+  }, [isEdit, data]);
 
-    useEffect(()=>{
-    
-      if(data?.id && data.id !== 0){
-        setId(data.id);
-        setName(data.name);
-      }
-    },[data]) 
-    useEffect(()=>{
-    
-      if(!submited){
-           setId("");
-           setName("");
-      }
-      
-    },[submited]) 
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    const payload = { id, name, email };
 
-    
+    if (isEdit) updateUser(payload);
+    else addUsers(payload);
+
+    setId("");
+    setName("");
+    setEmail("");
+  };
 
   return (
-    <div className='cont'>
-        <div className='id'>ID <input value={id} onChange={handleId} placeholder='Enter ID'/></div>
-        <div className='name'>Name <input value={name} onChange={handleName} placeholder='Enter Name'/></div>
-        <div className='submit'><input value={isEdit?'Update': 'Add'} onClick={isEdit?()=>updateUser({id,name}):()=>addUsers({id,name})}/></div>
-      
-    </div>
-  )
+    <main className="formcontainer">
+      <form className="form" onSubmit={handleSubmit}>
+
+        <label>Full Name</label>
+        <input 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <label>ID</label>
+        <input 
+          value={id} 
+          onChange={(e) => setId(e.target.value)}
+        />
+
+        <label>Email</label>
+        <input 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input 
+          type="submit" 
+          className="submit" 
+          value={isEdit ? "Update" : "Add"}
+        />
+      </form>
+    </main>
+  );
 }

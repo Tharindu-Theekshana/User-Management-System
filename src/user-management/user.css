@@ -1,0 +1,15 @@
+.container {
+    height: 50%;
+}.container {
+  display: flex;
+  justify-content: center; /* horizontal centering */
+  padding: 20px;
+}
+
+.user-section {
+  display: flex;
+  flex-direction: column; /* stack form on top of table */
+  gap: 20px;              /* space between form and table */
+  width: 100%;
+  max-width: 800px;       /* optional max width */
+}

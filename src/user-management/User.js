@@ -1,84 +1,77 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserForm from './UserForm'
 import UserTable from './UserTable'
-import  Axios  from 'axios'
-
-
 
 export default function User() {
+  const [users, setUsers] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const [users,setUsers] = useState([]);
-  const [submited,setSubmited] = useState(false);
-  const [isEdit,setIsEdit] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({});
-
-  useEffect(()=>{
-    getusers();
-  },[])
-
-  const getusers = () => {
-    Axios.get('http://localhost:8085/api/v1/getUsers').then(response =>{
-      setUsers(response?.data || []);
-  })
-    .catch(error => {
-      console.error("Axios error : ", error);
-    })
-  } 
-
-  const addUsers = (data) => {
-    setSubmited(true);
-    const payload = {
-      id: data.id,
-      name: data.name
+  // Load from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("users");
+    if (saved) {
+      setUsers(JSON.parse(saved));
     }
-    Axios.post('http://localhost:8085/api/v1/addUsers',payload).then(()=> {
-      getusers();
-      setSubmited(false);
-    })
-    .catch(error =>{
-      console.error("Axios error : ", error);
-    });
-  }
+  }, []);
 
-  const updateUser = (data) => {
-    setSubmited(true);
-    const payload = {
-      id: data.id,
-      name: data.name
-    }
-    Axios.put('http://localhost:8085/api/v1/updateUser',payload).then(()=> {
-      getusers();
-      setSubmited(false);
-      setIsEdit(false);
-    })
-    .catch(error =>{
-      console.error("Axios error : ", error);
-    });
+  // Save whenever users change
+  useEffect(() => {
+    localStorage.setItem("users", JSON.stringify(users));
+  }, [users]);
 
-  }
+  const addUsers = (user) => {
+    setUsers(prev => [...prev, user]);
+  };
 
-  const deleteUser = (data) => {
-    
-    Axios.delete(`http://localhost:8085/api/v1/deleteUser/${data.id}`).then(()=> {
-      getusers();
-    })
-    .catch(error =>{
-      console.error("Axios error : ", error);
-    });
+  const updateUser = (updatedUser) => {
+    setUsers(prev =>
+      prev.map(u => (u.id === updatedUser.id ? updatedUser : u))
+    );
+    setIsEdit(false);
+    setEditData(null);
+  };
 
-  }
-  
+  const deleteUser = (id) => {
+    setUsers(prev => prev.filter(u => u.id !== id));
+  };
 
-  
+  const editUser = (user) => {
+    setIsEdit(true);
+    setEditData(user);
+  };
 
-  
-
-    
+  // Filter users according to search
+  const filteredUsers = users.filter(u =>
+    u.name.toLowerCase().includes(search.toLowerCase()) ||
+    u.email.toLowerCase().includes(search.toLowerCase()) ||
+    u.id.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <div>
-        <UserForm addUsers={addUsers} submited={submited} isEdit={isEdit} updateUser={updateUser} data={selectedUser}/>
-        <UserTable rows={users} selectedUser={data=>{setSelectedUser(data); setIsEdit(true);}} deleteUser={data => window.confirm("Are you sure?") && deleteUser(data)}/>
-    </div>
-  )
+    <>
+      <UserForm 
+        addUsers={addUsers}
+        updateUser={updateUser}
+        isEdit={isEdit}
+        data={editData}
+      />
+
+      {/* Search Bar */}
+      <input 
+        type="text"
+        placeholder="Search users..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{ margin: "20px", padding: "10px", width: "200px" }}
+      />
+
+      <UserTable 
+        users={filteredUsers}
+        deleteUser={deleteUser}
+        editUser={editUser}
+      />
+    </>
+  );
 }
